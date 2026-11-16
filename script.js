@@ -1,12 +1,3 @@
-// Mini-libreria — Settimana VII Giorno I
-//
-// Devi fare 4 cose:
-// 1. Definire una classe Libro (titolo, autore, anno, letto)
-// 2. Definire una classe LibroDigitale che estende Libro (aggiunge formato, dimensioneMb)
-// 3. Aggiungere un listener al form che crea una nuova istanza e la aggiunge all'array
-// 4. Renderizzare la lista nel <ul id="lista-libri"> via innerHTML
-//
-// Bonus: bottone "Segna come letto" su ogni elemento, gestito con event delegation.
 
 const booksList = document.querySelector('#booksList');
 const registerForm = document.querySelector('#register');
@@ -14,50 +5,111 @@ const newTitle = document.querySelector('#newTitle');
 const newAuthor = document.querySelector('#newAuthor');
 const newYear = document.querySelector('#newYear');
 const newFormat = document.querySelector('#newFormat');
+const dimensioneMB = document.querySelector('#dimensione');
+const campoDimensione = document.querySelector('#campo-dimensione');
 
 const newBooks = [];
 
 // === Classi ===
+
 class Book {
-    constructor( _booksTitle, _booksAuthor, _booksYear) {
-        //this.#booksId = crypto.randomUUID;
+    read = false;
+
+    constructor(_booksTitle, _booksAuthor, _booksYear, _booksFormat) {
+        this.booksId = crypto.randomUUID();
         this.booksTitle = _booksTitle;
         this.booksAuthor = _booksAuthor;
         this.booksYear = _booksYear;
+        this.booksFormat = _booksFormat;
     }
-    printBooks(){
-       // const myFormat = this.booksFormat ? 'Carteceo' : 'Digitale';
-		const newLi = document.createElement('li');
-		newLi.textContent += `${this.booksTitle} ${this.booksAuthor} ${this.booksYear}`;
-		booksList.appendChild(newLi);
+
+    markAsRead() {
+        this.read = true;
+    }
+
+    printBooks() {
+        const state = this.read ? "letto" : "da leggere";
+
+        return `${this.booksTitle} (${this.booksYear}) - ${state}`;
     }
 }
 
 class DigitalBook extends Book {
-    constructor(_booksId, _booksTitle, _booksAuthor, _booksYear, _booksFormat, _dimensionMB) {
-        this.booksFormat = _booksFormat;
-        this.dimensionMB = _dimensionMB;
+    constructor(_booksTitle, _booksAuthor, _booksYear, _booksFormat, _dimensioneMB) {
+        super(_booksTitle, _booksAuthor, _booksYear, _booksFormat);
+        this.dimensioneMB = _dimensioneMB;
+    }
+
+    printBooks() {
+        const state = this.read ? "letto" : "da leggere";
+
+        return `${this.booksTitle} (${this.booksYear}), formato digitale (${this.dimensioneMB} MB) - ${state}`;
     }
 }
 
-registerForm.addEventListener('submit', (e) => {
-	e.preventDefault();
-	const newBook = new Book(
-		newTitle.value,
-		newAuthor.value,
-		newYear.value,
-		newFormat.value,
-	);
-	console.log(newBook);
-    newBook.printBooks();
-	newBooks.push(newBook);
-});
-
-// === Stato (array di libri) ===
-
-
 // === Render ===
 
+function renderBooks() {
+    booksList.innerHTML = newBooks.map((book) => {
+        return `
+            <li>
+                ${book.printBooks()}
+                ${book.read ? '✓ Letto' : `
+                    <button data-id="${book.booksId}">
+                        Segna come letto
+                    </button>
+                `}
+            </li>
+        `;
+    }).join('');
+}
 
+// === Submit e Change===
 
-// === Eventi ===
+campoDimensione.hidden = true;
+
+newFormat.addEventListener('change', () => {
+    campoDimensione.hidden = newFormat.value !== 'D';
+});
+
+registerForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    let newBook;
+
+    if (newFormat.value === 'D') {
+        newBook = new DigitalBook(
+            newTitle.value,
+            newAuthor.value,
+            newYear.value,
+            newFormat.value,
+            dimensioneMB.value
+        );
+    } else {
+        newBook = new Book(
+            newTitle.value,
+            newAuthor.value,
+            newYear.value,
+            newFormat.value
+        );
+    }
+
+    newBooks.push(newBook);
+    renderBooks();
+    registerForm.reset();
+});
+
+// === Event delegation ===
+
+booksList.addEventListener('click', (e) => {
+    const button = e.target.closest('button');
+    if (!button) return;
+
+    const id = button.dataset.id;
+    const book = newBooks.find((book) => book.booksId === id);
+
+    if (book) {
+        book.markAsRead();
+        renderBooks();
+    }
+});
