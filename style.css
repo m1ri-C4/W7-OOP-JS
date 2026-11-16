@@ -2,7 +2,9 @@
    Stile minimal: il focus è sulla logica JS, non sul layout. */
 
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
@@ -26,8 +28,14 @@ body {
   text-align: center;
 }
 
-.site-header h1 { margin: 0 0 8px; }
-.site-header p  { margin: 0; opacity: 0.85; }
+.site-header h1 {
+  margin: 0 0 8px;
+}
+
+.site-header p {
+  margin: 0;
+  opacity: 0.85;
+}
 
 
 /* Aggiungi qui le tue regole per form, lista libri, bottoni, ecc. */

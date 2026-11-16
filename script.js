@@ -8,13 +8,52 @@
 //
 // Bonus: bottone "Segna come letto" su ogni elemento, gestito con event delegation.
 
+const booksList = document.querySelector('#booksList');
+const registerForm = document.querySelector('#register');
+const newTitle = document.querySelector('#newTitle');
+const newAuthor = document.querySelector('#newAuthor');
+const newYear = document.querySelector('#newYear');
+const newFormat = document.querySelector('#newFormat');
+
+const newBooks = [];
 
 // === Classi ===
+class Book {
+    constructor( _booksTitle, _booksAuthor, _booksYear) {
+        //this.#booksId = crypto.randomUUID;
+        this.booksTitle = _booksTitle;
+        this.booksAuthor = _booksAuthor;
+        this.booksYear = _booksYear;
+    }
+    printBooks(){
+       // const myFormat = this.booksFormat ? 'Carteceo' : 'Digitale';
+		const newLi = document.createElement('li');
+		newLi.textContent += `${this.booksTitle} ${this.booksAuthor} ${this.booksYear}`;
+		booksList.appendChild(newLi);
+    }
+}
 
+class DigitalBook extends Book {
+    constructor(_booksId, _booksTitle, _booksAuthor, _booksYear, _booksFormat, _dimensionMB) {
+        this.booksFormat = _booksFormat;
+        this.dimensionMB = _dimensionMB;
+    }
+}
 
+registerForm.addEventListener('submit', (e) => {
+	e.preventDefault();
+	const newBook = new Book(
+		newTitle.value,
+		newAuthor.value,
+		newYear.value,
+		newFormat.value,
+	);
+	console.log(newBook);
+    newBook.printBooks();
+	newBooks.push(newBook);
+});
 
 // === Stato (array di libri) ===
-
 
 
 // === Render ===
