@@ -41,8 +41,8 @@
             <option value="C">Cartaceo</option>
             <option value="D">Digitale</option>
           </select>
-           
-           <div class="campo campo-condizionale" id="campo-dimensione" hidden>
+
+          <div class="campo campo-condizionale" id="campo-dimensione" hidden>
             <label for="dimensione" class="form-label fw-bold">Dimensione (MB)</label>
             <input type="number" id="dimensione" name="dimensione" step="0.1">
           </div>
@@ -54,10 +54,11 @@
     </section>
 
     <section class="lista-section">
-      <h2 class="fw-bold mt-5">I tuoi libri</h2>
-      <ul id="booksList">
-        <!-- popolato da JavaScript -->
-      </ul>
+      <h2 class="fw-bold m-4">
+        I tuoi libri (<span id="booksCount">0</span>)
+      </h2>
+
+      <ul id="booksList" class="list-group list-unstyled"></ul>
     </section>
 
   </main>

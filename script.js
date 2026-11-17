@@ -7,6 +7,7 @@ const newYear = document.querySelector('#newYear');
 const newFormat = document.querySelector('#newFormat');
 const dimensioneMB = document.querySelector('#dimensione');
 const campoDimensione = document.querySelector('#campo-dimensione');
+const booksCount = document.querySelector('#booksCount');
 
 const newBooks = [];
 
@@ -48,20 +49,88 @@ class DigitalBook extends Book {
 }
 
 // === Render ===
-
 function renderBooks() {
-    booksList.innerHTML = newBooks.map((book) => {
-        return `
-            <li>
-                ${book.printBooks()}
-                ${book.read ? '✓ Letto' : `
-                    <button data-id="${book.booksId}">
-                        Segna come letto
-                    </button>
-                `}
-            </li>
-        `;
-    }).join('');
+    booksList.replaceChildren();
+
+    newBooks.forEach((book) => {
+
+        // CARD PRINCIPALE
+        const li = document.createElement('li');
+        li.classList.add(
+            'list-group-item',
+            'd-flex',
+            'justify-content-between',
+            'align-items-center',
+            'p-4',
+            'mb-3',
+            'rounded-3',
+            'shadow-sm',
+            'border',
+            'border-0',
+            'border-start',
+            'border-4'
+        );
+        //CONTATORE
+        booksCount.textContent = newBooks.length;
+
+        li.classList.add(book.read ? 'border-success' : 'border-primary');
+
+        // CONTENITORE INFORMAZIONI
+        const bookInfo = document.createElement('div');
+
+        // RIGA TITOLO + BADGE
+        const titleRow = document.createElement('div');
+        titleRow.classList.add('d-flex', 'align-items-center', 'gap-2', 'flex-wrap');
+
+        // TITOLO
+        const title = document.createElement('h5');
+        title.classList.add('fw-bold', 'mb-0');
+        title.textContent = book.booksTitle;
+
+        // BADGE FORMATO
+        const badge = document.createElement('span');
+        badge.classList.add('badge', 'rounded-pill', 'bg-secondary-subtle', 'text-secondary');
+
+        if (book.booksFormat === 'D') {
+            badge.textContent = `digitale (${book.dimensioneMB} MB)`;
+        } else {
+            badge.textContent = 'cartaceo';
+        }
+
+        titleRow.appendChild(title);
+        titleRow.appendChild(badge);
+
+        // AUTORE E ANNO
+        const details = document.createElement('p');
+        details.classList.add('text-secondary', 'mb-0', 'mt-2');
+        details.textContent = `${book.booksAuthor} — ${book.booksYear}`;
+
+        bookInfo.appendChild(titleRow);
+        bookInfo.appendChild(details);
+
+        // STATO LETTURA
+        if (book.read) {
+
+            const readText = document.createElement('span');
+            readText.classList.add('text-secondary', 'text-nowrap');
+            readText.textContent = '✓ letto';
+
+            li.appendChild(bookInfo);
+            li.appendChild(readText);
+
+        } else {
+
+            const readButton = document.createElement('button');
+            readButton.classList.add('btn', 'btn-outline-secondary', 'text-nowrap');
+            readButton.textContent = 'Segna come letto';
+            readButton.dataset.id = book.booksId;
+
+            li.appendChild(bookInfo);
+            li.appendChild(readButton);
+        }
+
+        booksList.appendChild(li);
+    });
 }
 
 // === Submit e Change===
