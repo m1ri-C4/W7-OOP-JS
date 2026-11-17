@@ -54,9 +54,17 @@
     </section>
 
     <section class="lista-section">
-      <h2 class="fw-bold m-4">
-        I tuoi libri (<span id="booksCount">0</span>)
-      </h2>
+      <div class="d-flex justify-content-between align-items-center flex-nowrap m-4">
+
+        <h2 class="fw-bold m-0">
+          I tuoi libri (<span id="booksCount">0</span>)
+        </h2>
+
+        <button id="deleteAll" class="btn btn-outline-danger text-nowrap ms-3">
+          Elimina tutto
+        </button>
+
+      </div>
 
       <ul id="booksList" class="list-group list-unstyled"></ul>
     </section>

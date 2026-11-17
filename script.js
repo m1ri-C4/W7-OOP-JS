@@ -8,8 +8,22 @@ const newFormat = document.querySelector('#newFormat');
 const dimensioneMB = document.querySelector('#dimensione');
 const campoDimensione = document.querySelector('#campo-dimensione');
 const booksCount = document.querySelector('#booksCount');
+const deleteAll = document.querySelector('#deleteAll');
 
-const newBooks = [];
+
+
+//const newBooks = [];
+
+// === Local Storage ===
+function saveBooks() {
+    localStorage.setItem('libri', JSON.stringify(newBooks));
+}
+
+function loadBooks() {
+    return JSON.parse(localStorage.getItem('libri') ?? '[]');
+}
+
+const newBooks = loadBooks();
 
 // === Classi ===
 
@@ -108,15 +122,18 @@ function renderBooks() {
         bookInfo.appendChild(titleRow);
         bookInfo.appendChild(details);
 
+        // CONTENITORE PULSANTI
+        const buttonsContainer = document.createElement('div');
+        buttonsContainer.classList.add('d-flex', 'align-items-center', 'gap-2');
+
         // STATO LETTURA
         if (book.read) {
 
             const readText = document.createElement('span');
-            readText.classList.add('text-secondary', 'text-nowrap');
+            readText.classList.add('text-success', 'text-nowrap');
             readText.textContent = '✓ letto';
 
-            li.appendChild(bookInfo);
-            li.appendChild(readText);
+            buttonsContainer.appendChild(readText);
 
         } else {
 
@@ -125,13 +142,34 @@ function renderBooks() {
             readButton.textContent = 'Segna come letto';
             readButton.dataset.id = book.booksId;
 
-            li.appendChild(bookInfo);
-            li.appendChild(readButton);
+            buttonsContainer.appendChild(readButton);
         }
+
+        // TASTO RIMUOVI
+        const deleteBook = document.createElement('button');
+        deleteBook.classList.add('btn', 'btn-danger');
+        deleteBook.textContent = 'Elimina';
+
+        //elimina il libro
+        deleteBook.addEventListener('click', () => {
+            const index = newBooks.findIndex((item) => item.booksId === book.booksId);
+
+            if (index !== -1) {
+                newBooks.splice(index, 1);
+                saveBooks();
+                renderBooks();
+            }
+        });
+
+        buttonsContainer.appendChild(deleteBook);
+
+        // AGGIUNGO GLI ELEMENTI ALLA CARD
+        li.appendChild(bookInfo);
+        li.appendChild(buttonsContainer);
 
         booksList.appendChild(li);
     });
-}
+};
 
 // === Submit e Change===
 
@@ -164,8 +202,10 @@ registerForm.addEventListener('submit', (e) => {
     }
 
     newBooks.push(newBook);
+    saveBooks();
     renderBooks();
     registerForm.reset();
+    campoDimensione.hidden = true;
 });
 
 // === Event delegation ===
@@ -178,7 +218,16 @@ booksList.addEventListener('click', (e) => {
     const book = newBooks.find((book) => book.booksId === id);
 
     if (book) {
-        book.markAsRead();
+        book.read = true;
+        saveBooks();
         renderBooks();
     }
 });
+
+// === Elimina tutti i libri ===
+deleteAll.addEventListener('click', () => {
+    localStorage.removeItem('libri');
+    newBooks.length = 0;
+    renderBooks();
+});
+renderBooks(); 
