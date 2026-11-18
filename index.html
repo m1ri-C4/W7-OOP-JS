@@ -19,6 +19,25 @@
 
   <main class="container">
 
+    <section class="container bg-body mt-5">
+
+      <h2 class="fw-bold mb-3">Cerca nella libreria </h2>
+
+      <form id="search" class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="es. harari, tolkien..." aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Cerca</button>
+      </form>
+
+      <div id="loading" class="alert alert-info d-none align-items-center gap-2 mt-2" role="status">
+        <div class="spinner-border spinner-border-sm" aria-hidden="true"></div>
+        <p class="mb-0">Caricamento in corso...</p>
+      </div>
+
+      <p id="message" class="text-body-secondary mt-2" role="status"></p>
+
+      <ul id="results"></ul>
+    </section>
+
     <section id="form-section" class="container bg-body mt-5">
       <!-- form per aggiungere un libro: titolo, autore, anno, formato (cartaceo/digitale) -->
       <h2 class="fw-bold mb-3">Aggiungi un libro</h2>
