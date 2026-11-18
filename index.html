@@ -46,24 +46,24 @@
         <div class="col">
 
           <label for="newTitle" class="form-label fw-bold">Titolo</label>
-          <input type="text" id="newTitle" class="form-control" />
+          <input type="text" id="newTitle" class="form-control" required/>
 
           <label for="newAuthor" class="form-label fw-bold">Autore</label>
-          <input type="text" id="newAuthor" class="form-control" />
+          <input type="text" id="newAuthor" class="form-control" required />
 
 
           <label for="newYear" class="form-label fw-bold">Anno</label>
-          <input type="number" id="newYear" class="form-control" />
+          <input type="number" id="newYear" class="form-control" required />
 
           <label for="newFormat" class="form-label fw-bold">Formato</label>
-          <select id="newFormat" class="form-select">
+          <select id="newFormat" class="form-select" required>
             <option value="C">Cartaceo</option>
             <option value="D">Digitale</option>
           </select>
 
           <div class="campo campo-condizionale" id="campo-dimensione" hidden>
             <label for="dimensione" class="form-label fw-bold">Dimensione (MB)</label>
-            <input type="number" id="dimensione" name="dimensione" step="0.1">
+            <input type="number" id="dimensione" name="dimensione" step="0.1" required>
           </div>
 
           <button type="submit" class="btn btn-primary w-25 mt-3"> Aggiungi</button>
